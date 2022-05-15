@@ -7,7 +7,7 @@ const ProductPage: NextPage = ({ children }) => {
     <>
       <DefaultPage title="Products-Form">
         <Container className="mt-5">
-          <Form>
+          <Form className="border p-5 shadow-lg mb-5 bg-white rounded">
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Email</Form.Label>

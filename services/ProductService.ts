@@ -32,6 +32,10 @@ class ProductService {
 
     }
 
+    removeProduct() {
+        return null;
+    }
+
 }
 
 export default ProductService

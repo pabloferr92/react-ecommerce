@@ -15,9 +15,9 @@ const ProductListPage = (props: any) => {
     <>
       <DefaultPage title="title">
         <>
-          <h3 className="text-center mt-3">Lista de Usuários</h3>
+          <h3 className="text-center mt-4">Lista de Produtos</h3>
           <Container className="justify-content-md-center w-100 ">
-            <Col className="w-10">
+            <Col className="w-10 border p-5 shadow-lg mb-5 bg-white">
               <ProductListComponent data={props.data}></ProductListComponent>
             </Col>
           </Container>

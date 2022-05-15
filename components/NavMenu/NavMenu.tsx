@@ -18,8 +18,8 @@ const NavMenu = () => {
           <Row>
             <Col>
               <Link href="/products/list" passHref>
-                <Nav.Link>Produtos</Nav.Link>
-              </Link>{" "}
+                <Nav.Link className="nav-link active">Produtos</Nav.Link>
+              </Link>
             </Col>
           </Row>
           <Link href="/index" passHref>

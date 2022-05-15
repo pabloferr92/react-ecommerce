@@ -1,9 +1,12 @@
-import DataTable from "react-data-table-component";
+import DataTable, { createTheme } from "react-data-table-component";
 import type { NextPage } from "next";
 import { Button, Row } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { IProduct } from "../models/Product";
 import ProductService from "../services/ProductService";
+import { AiOutlineEdit } from "react-icons/ai";
+import { FcEmptyTrash } from "react-icons/fc";
+import { IoPersonAddOutline } from "react-icons/io5";
 
 type CompProps = {
   data: IProduct[];
@@ -12,6 +15,31 @@ type CompProps = {
 const ProductListComponent = ({ data }: CompProps) => {
   const router = useRouter();
 
+  const customStyles = {
+    rows: {
+      style: {
+        minHeight: "72px", // override the row height
+        justifyContent: "center",
+        fontSize: "15px",
+      },
+    },
+    headCells: {
+      style: {
+        paddingLeft: "8px", // override the cell padding for head cells
+        paddingRight: "8px",
+        textAlign: "center",
+        justifyContent: "center",
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: "8px", // override the cell padding for data cells
+        paddingRight: "8px",
+        textAlign: "center",
+        justifyContent: "center",
+      },
+    },
+  };
   const productService = new ProductService();
 
   const columns = [
@@ -33,23 +61,25 @@ const ProductListComponent = ({ data }: CompProps) => {
         return (
           <>
             <Button
+              variant="outline-info"
               onClick={() => {
                 router.push(`/users/${row.id}`);
               }}
               className="mr-3"
             >
-              <i className="bi bi-pencil p-3"></i>
+              <AiOutlineEdit></AiOutlineEdit>
             </Button>
-            {/* <Button
+            <Button
+              variant="outline-info"
               className="ml-3"
               onClick={() => {
-                productService.removeUser(row.id).then((res) => {
+                productService.removeProduct(row.id).then((res) => {
                   router.push("/users");
                 });
               }}
             >
-              <i className="bi bi-trash p-3 color-red"></i>
-            </Button> */}
+              <FcEmptyTrash></FcEmptyTrash>
+            </Button>
           </>
         );
       },
@@ -58,15 +88,21 @@ const ProductListComponent = ({ data }: CompProps) => {
 
   return (
     <>
-      <DataTable columns={columns} data={data} />
+      <DataTable
+        className=""
+        columns={columns}
+        data={data}
+        customStyles={customStyles}
+      />
       <Row className="w-100 justify-content-center">
         <Button
+          className="w-auto"
+          variant="outline-info"
           onClick={() => {
-            router.push("/users/create-user");
+            router.push("/products/create");
           }}
-          className="w-1"
         >
-          <i className="bi bi-person-plus"></i>
+          <IoPersonAddOutline></IoPersonAddOutline>
         </Button>
       </Row>
     </>
