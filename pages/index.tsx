@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
+import { DefaultPage } from "../components/DefaultPage/DefaultPage";
 import { HomeComponent } from "../components/HomeComponent";
 import { MenuCategory } from "../components/MenuCategory";
 import NavMenu from "../components/NavMenu/NavMenu";
 import StorageService from "../services/StorageService";
-import { DefaultPage } from "./../components/NavMenu/DefaultPage/DefaultPage";
 
 const Home: NextPage = () => {
   const storageService = new StorageService();

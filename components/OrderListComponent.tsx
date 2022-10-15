@@ -10,61 +10,55 @@ type CompProps = {
   data: IProduct[];
 };
 
-const ProductListComponent = ({ data }: CompProps) => {
+const OrderListComponent = ({ data }: CompProps) => {
   const router = useRouter();
 
   const productService = new ProductService();
 
-  function handleEdit(item: IProduct) {
-    console.log("order editar " + item);
+  function handleEditOrder(order: IOder) {
+    console.log("order editar " + order);
 
-    router.push(`/products/${item.id}`);
-  }
-
-  function handleRemove(item: IProduct) {
-    return null;
+    router.push(`/orders/${order.id}`);
   }
 
   const columns = [
     {
-      name: "Id do Produto",
+      name: "Nº do Pedido",
       selector: (row: any) => row.id,
+      sortable: true,
     },
     {
-      name: "Descrição",
+      name: "Usuário",
       selector: (row: any) => row.description,
     },
     {
-      name: "Preço",
-      selector: (row: any) => row.price,
+      name: "Estado",
+      selector: (row: any) => row.state,
+      cell: (row: any) => <div>{row.state.toUpperCase()}</div>,
     },
     {
-      name: "Categoria",
-      selector: (row: any) => row.category,
-    },
-    // {
-    //   name: "Imagem",
-    //   selector: (row: any) => row.image,
-    // },
-    {
-      name: "Gelada",
-      selector: (row: any) => row.cold,
+      name: "Data do pedido",
+      selector: (row: any) => row.created_at,
+      sortable: true,
+      cell: (row: any) => (
+        <div>{new Date(row.created_at).toLocaleDateString()}</div>
+      ),
     },
     {
       name: "Actions",
-      cell: (row: IProduct, index: number) => {
+      cell: (row: IOder, index: number) => {
         return (
           <>
             <div
               onClick={() => {
-                handleEdit(row);
+                handleEditOrder(row);
               }}
             >
               <EditButton></EditButton>
             </div>
             <div
               onClick={() => {
-                handleRemove(row);
+                handleEditOrder(row);
               }}
             >
               <DeleteButton></DeleteButton>
@@ -93,4 +87,4 @@ const ProductListComponent = ({ data }: CompProps) => {
   );
 };
 
-export default ProductListComponent;
+export default OrderListComponent;

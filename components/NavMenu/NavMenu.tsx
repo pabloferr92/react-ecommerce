@@ -2,36 +2,78 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button, Col, Container, Nav, Navbar, Row } from "react-bootstrap";
 import { IoIosBeer } from "react-icons/io";
+import { useTheme } from "styled-components";
 
 const NavMenu = () => {
+  const theme = useTheme();
+
   return (
     <>
-      <Navbar bg="dark" variant="dark">
+      <Navbar
+        bg={theme.colors.bold}
+        variant="dark"
+        style={{
+          backgroundColor: theme.colors.header,
+          color: theme.colors.cold,
+        }}
+      >
         <Container>
-          <Navbar.Brand>
-            <Link href="/" passHref>
-              <Nav.Link>
-                <IoIosBeer className="h1"></IoIosBeer>
-              </Nav.Link>
-            </Link>{" "}
-          </Navbar.Brand>
-          <Row>
-            <Col>
-              <Link href="/products/list" passHref>
-                <Nav.Link className="nav-link active">Produtos</Nav.Link>
-              </Link>
-            </Col>
-          </Row>
-          <Link href="/index" passHref>
-            <Nav.Link>
-              <Button
-                className="p-3 mb-2"
-                variant="outline-warning bg-white rounded-pill"
-              >
-                Entrar
-              </Button>{" "}
-            </Nav.Link>
+          <Link href="/" passHref>
+            <Navbar.Brand>
+              <IoIosBeer className="h1"></IoIosBeer>
+            </Navbar.Brand>
           </Link>{" "}
+          <Nav>
+            <Row className="d-flex align-items-center">
+              <Col>
+                <Link href="/dashboard" passHref>
+                  <Nav.Link style={{ color: theme.colors.primary }}>
+                    Dashboard
+                  </Nav.Link>
+                </Link>
+              </Col>
+              <Col>
+                <Link href="/products/list" passHref>
+                  <Nav.Link style={{ color: theme.colors.primary }}>
+                    Produtos
+                  </Nav.Link>
+                </Link>
+              </Col>
+              <Col>
+                <Link href="/orders/list" passHref>
+                  <Nav.Link style={{ color: theme.colors.primary }}>
+                    Pedidos
+                  </Nav.Link>
+                </Link>
+              </Col>
+              <Col>
+                <Link href="/products/list" passHref>
+                  <Nav.Link style={{ color: theme.colors.primary }}>
+                    Promoções
+                  </Nav.Link>
+                </Link>
+              </Col>
+              <Col>
+                <Link href="/products/list" passHref>
+                  <Nav.Link style={{ color: theme.colors.primary }}>
+                    Contato
+                  </Nav.Link>
+                </Link>
+              </Col>
+              {/* <Col className="m-auto">
+                <Link href="/login" passHref>
+                  <Nav.Link>
+                    <Button
+                      className="p-3 mb-2"
+                      variant="outline-warning bg-white rounded-pill"
+                    >
+                      Entrar
+                    </Button>{" "}
+                  </Nav.Link>
+                </Link>{" "}
+              </Col> */}
+            </Row>
+          </Nav>
         </Container>
       </Navbar>
     </>

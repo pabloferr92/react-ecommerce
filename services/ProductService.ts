@@ -1,43 +1,30 @@
-import { storage } from '../libs/firebase';
-import { ref, listAll, getDownloadURL, uploadBytes } from 'firebase/storage';
-import { IImage } from './../models/Image';
-import { AxiosResponse } from 'axios';
-import { IProduct } from './../models/Product';
-import api from './api';
-
-
+import { storage } from "../libs/firebase";
+import { ref, listAll, getDownloadURL, uploadBytes } from "firebase/storage";
+import { IImage } from "./../models/Image";
+import { AxiosResponse } from "axios";
+import { IProduct } from "./../models/Product";
+import api from "./api";
 
 class ProductService {
+  getAll(): Promise<AxiosResponse<IProduct[]>> {
+    return api.get<IProduct[]>(`/products`);
+  }
 
-    updateLoadImage = async (file: File) => {
-        if(['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-    
-            let newFile = ref(storage, `images/`);
-    
-            let upload = await uploadBytes(newFile, file);
-            let photoUrl = await getDownloadURL(upload.ref);
-    
-            return { name: upload.ref.name, url: photoUrl } ;
-        } else {
-            return new Error('Tipo de arquivo não permitido.');
-       }
-      
-    }
+  retrieve(id: number | string): Promise<AxiosResponse<IProduct>> {
+    return api.get<IProduct>(`/products/${id}`);
+  }
 
-    
+  remove(id: number | string) {
+    return api.delete<IProduct>(`/products/${id}`);
+  }
 
-    getAll() : Promise<AxiosResponse<IProduct[]>> {
+  update(id: number | string, data: IProduct) {
+    return api.put<IProduct>(`/products/${id}`, data);
+  }
 
-        return api.get<IProduct[]>(`/products`);
-
-    }
-
-    removeProduct() {
-        return null;
-    }
-
+  getProductsByState(state: string) {
+    return api.get<IProduct[]>(`/products?state=${state}`);
+  }
 }
 
-export default ProductService
-
-
+export default ProductService;
