@@ -15,17 +15,39 @@ export async function getServerSideProps() {
   return { props: { data: data.data } };
 }
 
+type TotalOrders = {
+  recebido: number;
+  separacao: number;
+  enviado: number;
+  entregue: number;
+};
+
 const Dashboard = (props: any) => {
   const theme = useTheme();
-  const [totalNewOrders, setTotalnNwOrders] = useState<IOrder[]>([]);
+  const [totalOrders, setTotalOrders] = useState<TotalOrders>({
+    recebido: 0,
+    separacao: 0,
+    enviado: 0,
+    entregue: 0,
+  });
 
   const linkStyle = { color: theme.colors.bold, fontSize: "13px" };
 
   useEffect(() => {
-    const newOrders = props.data.filter((ele: any) => {
-      return ele.state === "submited";
+    const quantities = {
+      recebido: 0,
+      separacao: 0,
+      enviado: 0,
+      entregue: 0,
+    };
+    props.data.forEach((ele: any) => {
+      if (ele.state.value == 1) quantities.recebido += 1;
+      if (ele.state.value == 2) quantities.separacao += 1;
+      if (ele.state.value == 3) quantities.enviado += 1;
+      if (ele.state.value == 4) quantities.entregue += 1;
     });
-    setTotalnNwOrders(newOrders);
+
+    setTotalOrders(quantities);
   }, []);
 
   return (
@@ -35,67 +57,70 @@ const Dashboard = (props: any) => {
           <h3 className="text-center mt-4">Dashboard</h3>
           <Container className="justify-content-md-center w-100 ">
             <Col className="border p-5 shadow-lg w-100">
-              <Row className="w-100 justify-content-center">
-                <CardCol className="col">
-                  <div className="card text-white bg-primary o-hidden h-100">
+              <Row className="w-100 justify-content-center m-3">
+                <CardCol className="col w-50">
+                  <div className="card text bg-danger o-hidden h-100">
                     <div className="card-body">
                       <div className="card-body-icon">
                         <i className="fa fa-fw fa-comments"></i>
                       </div>
                       <div className="mr-5">
-                        <CardTitle>New Messages!</CardTitle>
+                        <CardTitle>Novos Pedidos!</CardTitle>
+                      </div>
+                      <div className="mr-5">
+                        <CardTitle>Total: {totalOrders.recebido}</CardTitle>
                       </div>
                     </div>
-                    <a
-                      className="card-footer text-white clearfix small z-1"
-                      href="#"
-                    >
-                      <Link href="/orders/list_new_orders">
+                    <div className="card-footer text-white clearfix small z-1">
+                      <Link href="/orders/list?status=1">
                         <Nav.Link style={linkStyle} href="#home">
                           View Details
                         </Nav.Link>
-                      </Link>{" "}
-                      <span className="float-right">
-                        <i className="fa fa-angle-right"></i>
-                      </span>
-                    </a>
+                      </Link>
+                    </div>
                   </div>
                 </CardCol>
-                <CardCol className="col">
-                  <div className="card text-white bg-warning o-hidden h-100">
+                <CardCol className="col w-50">
+                  <div className="card text bg-warning o-hidden h-100">
                     <div className="card-body">
                       <div className="card-body-icon">
                         <i className="fa fa-fw fa-list"></i>
                       </div>
                       <div className="mr-5">
-                        <CardTitle>New Messages!</CardTitle>
+                        <CardTitle>Pedidos em separação!</CardTitle>
+                      </div>
+                      <div className="mr-5">
+                        <CardTitle>Total: {totalOrders.separacao} </CardTitle>
                       </div>
                     </div>
-                    <Link href="/orders/list_new_orders">
-                      <Nav.Link style={linkStyle} href="#home">
-                        View Details
-                      </Nav.Link>
-                    </Link>{" "}
-                    <RiInformationLine></RiInformationLine>
+                    <div className="card-footer text-white clearfix small z-1 ">
+                      <Link href="/orders/list?status=2">
+                        <Nav.Link style={linkStyle} href="#home">
+                          View Details
+                          <RiInformationLine></RiInformationLine>
+                        </Nav.Link>
+                      </Link>
+                    </div>
                   </div>
                 </CardCol>
               </Row>
 
-              <Row className="w-100 justify-content-center">
-                <CardCol className="col">
-                  <div className="card text-white bg-success o-hidden h-100">
+              <Row className="w-100 justify-content-center m-3">
+                <CardCol className="col w-50">
+                  <div className="card text bg-primary o-hidden h-100">
                     <div className="card-body">
                       <div className="card-body-icon">
                         <i className="fa fa-fw fa-shopping-cart"></i>
                       </div>
                       <div className="mr-5">
-                        <CardTitle>
-                          {totalNewOrders.length} New Orders!
-                        </CardTitle>
+                        <CardTitle>Pedidos Enviados!</CardTitle>
+                      </div>
+                      <div className="mr-5">
+                        <CardTitle>Total: {totalOrders.enviado} </CardTitle>
                       </div>
                     </div>
                     <span className="card-footer text-white clearfix small z-1">
-                      <Link href="/orders/list_new_orders">
+                      <Link href="/orders/list?status=3">
                         <Nav.Link style={linkStyle} href="#home">
                           View Details
                           <RiInformationLine></RiInformationLine>
@@ -104,21 +129,21 @@ const Dashboard = (props: any) => {
                     </span>
                   </div>
                 </CardCol>
-                <CardCol className="col">
-                  <div className="card text-white bg-danger o-hidden h-100">
+                <CardCol className="col w-50">
+                  <div className="card text bg-success o-hidden h-100">
                     <div className="card-body">
                       <div className="card-body-icon">
                         <i className="fa fa-fw fa-support"></i>
                       </div>
                       <div className="mr-5">
-                        <CardTitle>New Messages!</CardTitle>
+                        <CardTitle>Pedidos Entregues!</CardTitle>
+                      </div>
+                      <div className="mr-5">
+                        <CardTitle>Total: {totalOrders.entregue} </CardTitle>
                       </div>
                     </div>
-                    <a
-                      className="card-footer text-white clearfix small z-1"
-                      href="#"
-                    >
-                      <Link href="/orders/list_new_orders">
+                    <div className="card-footer text-white clearfix small z-1">
+                      <Link href="/orders/list?status=4">
                         <Nav.Link style={linkStyle} href="#home">
                           View Details
                         </Nav.Link>
@@ -126,7 +151,7 @@ const Dashboard = (props: any) => {
                       <span className="float-right">
                         <i className="fa fa-angle-right"></i>
                       </span>
-                    </a>
+                    </div>
                   </div>
                 </CardCol>
               </Row>

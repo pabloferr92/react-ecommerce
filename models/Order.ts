@@ -1,9 +1,11 @@
+import { IUSer } from "./User";
+
 export interface IOder {
   id: number;
-  user: string;
+  user: IUSer;
   created_at: Date;
   total_price: number;
-  state: string;
+  state: { value: string; display_value: string };
 }
 
 /*

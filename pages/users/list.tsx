@@ -1,32 +1,29 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
-import { IOrder } from "../../../mobile/smart-delivery/src/interfaces/order";
+import { AddButton } from "../../components/Buttons/AddButton";
 import { DefaultPage } from "../../components/DefaultPage/DefaultPage";
-import OrderListComponent from "../../components/OrderListComponent";
 import { ListTitle } from "../../components/Titles/ListTitle";
-import OrderService from "../../services/OrderService";
+import UserListComponent from "../../components/UserListComponent";
+import { IUSer } from "../../models/User";
+import UserService from "../../services/UserService";
+import { ToastContainer, toast } from "react-toastify";
 
 export async function getServerSideProps() {
-  const service = new OrderService();
+  const service = new UserService();
   const data = await service.getAll();
   return { props: { data: data.data } };
 }
 
-const ProductListPage = (props: any) => {
-  const router = useRouter();
-
-  const { status } = router.query;
-
-  const [data, setData] = useState<IOrder[]>(props.data);
+const UserListPage = (props: any) => {
+  const [data, setData] = useState<IUSer[]>(props.data);
 
   const [filtered, setFiltered] = useState(false);
 
-  const handleDataFilter = (filter: any) => {
-    const valueToFilter = filter.target?.value || filter;
-    if (valueToFilter) {
-      const filtered_data = props.data.filter((element: any) => {
-        return element.state.value == valueToFilter;
+  const handleDataFilter = (filter) => {
+    if (filter.target.value.length > 0) {
+      const filtered_data = props.data.filter((element) => {
+        return element.state.value == filter.target.value;
       });
       setFiltered(true);
       setData(filtered_data);
@@ -35,17 +32,17 @@ const ProductListPage = (props: any) => {
     }
   };
 
-  useEffect(() => {
-    if (status) {
-      handleDataFilter(status);
-    }
-  }, []);
+  const router = useRouter();
+
+  const handleAdd = () => {
+    router.push(`/users/create`);
+  };
 
   return (
     <>
       <DefaultPage title="title">
         <>
-          <ListTitle title="Pedidos"></ListTitle>
+          <ListTitle title="Usuários"></ListTitle>
           <Form className="justify-content-center w-50 d-flex">
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label></Form.Label>
@@ -55,8 +52,6 @@ const ProductListPage = (props: any) => {
                 defaultChecked={true}
                 name="state"
                 onChange={handleDataFilter}
-                defaultValue={status || ""}
-                disabled={status ? true : false}
               >
                 <option defaultChecked value={""}>
                   Escolha uma das opções
@@ -64,7 +59,7 @@ const ProductListPage = (props: any) => {
                 <option value="1">Solicitado</option>
                 <option value="2">Em Separação</option>
                 <option value="3">Encaminhado</option>
-                <option value="4">Entregue</option>
+                <option value="4">Concluído</option>
               </Form.Select>
               <Form.Text className="text-muted">
                 Pesquisar por status!
@@ -73,9 +68,14 @@ const ProductListPage = (props: any) => {
           </Form>
           <Container className="justify-content-md-center w-100 ">
             <Col className="w-10 border p-5 shadow-lg mb-5 bg-white">
-              <OrderListComponent
+              <Row className="justify-content-end w-100">
+                <div onClick={handleAdd}>
+                  <AddButton></AddButton>
+                </div>
+              </Row>
+              <UserListComponent
                 data={filtered ? data : props.data}
-              ></OrderListComponent>
+              ></UserListComponent>
             </Col>
           </Container>
         </>
@@ -84,4 +84,4 @@ const ProductListPage = (props: any) => {
   );
 };
 
-export default ProductListPage;
+export default UserListPage;

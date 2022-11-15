@@ -12,20 +12,31 @@ import { useRouter } from "next/router";
 import CartItemService from "../../services/CartItemService";
 import { ICart } from "../../models/Cart";
 import styled from "styled-components";
+import { IUSer } from "../../models/User";
 type props = {
   data: IOder;
 };
 
 export const OrderForm = ({ data }: props) => {
   const cartService = new CartItemService();
-  /*
-  
-       "user": "Pablo",
-      "created_at": "2022-09-25T02:17:41.569Z",
-      "state": "submited",
-      "total_price": 18.98,
-      "id": 11
-  */
+
+  const [user, setUser] = useState<IUSer>({
+    id: 0,
+    login: "",
+    name: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    address: "",
+    phone: "",
+  });
+
+  // useEffect(() => {
+  //   console.log("id user" + data.user);
+  //   api.get<IUSer>(`/users/${data.user}`).then((res) => {
+  //     setUser(res.data);
+  //   });
+  // }, []);
 
   const router = useRouter();
 
@@ -36,21 +47,33 @@ export const OrderForm = ({ data }: props) => {
     state: Yup.string().required("Estado obrigatório").min(1, "Too short"),
   });
 
+  function getState(value: number | string) {
+    if (value == 1) return { value: 1, display_value: "Recebido" };
+    if (value == 2) return { value: 2, display_value: "Em separação" };
+    if (value == 3) return { value: 3, display_value: "Enviado" };
+    if (value == 4) return { value: 4, display_value: "Entregue" };
+  }
+
   return (
     <>
       <Formik
         initialValues={{
-          state: data.state || "",
+          state: data.state.value || "",
           order: data.id || "",
           created_at: data.created_at || "",
-          user: data.user || "",
+          user: data.user.name || "",
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
           // same shape as initial values
 
+          let payload = {
+            user: data.user,
+            state: getState(values.state),
+          };
+
           api
-            .put<IOder>(`/orders/${values.order}`, values)
+            .patch<IOder>(`/orders/${values.order}`, payload)
             .then((res) => {
               toast.success("Pedido atualizado com sucesso");
               router.push("/orders/list");
@@ -73,13 +96,7 @@ export const OrderForm = ({ data }: props) => {
             <Form.Group
               className="mb-3"
               controlId="formOrder"
-              onChange={() => {
-                console.log(
-                  "errors" + errors
-                    ? true + JSON.stringify(errors)
-                    : false + JSON.stringify(errors)
-                );
-              }}
+              onChange={() => {}}
             >
               <Form.Label>Nº do Pedido</Form.Label>
               <Form.Control
@@ -118,12 +135,12 @@ export const OrderForm = ({ data }: props) => {
               <Form.Label>Cliente</Form.Label>
               <Form.Control
                 type="text"
-                placeholder={data.user}
+                placeholder={data.user.name}
                 disabled={true}
                 name="user"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                defaultValue={values.user}
+                defaultValue={data.user.name}
               />
             </Form.Group>
 
@@ -136,16 +153,16 @@ export const OrderForm = ({ data }: props) => {
                 name="state"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                defaultValue={values.state}
+                defaultValue={data.state.value}
               >
                 <option defaultChecked value={""}>
                   Escolha uma das opções
                 </option>
-                <option value="submited">Recebido</option>
-                <option value="separacao">Em Separação</option>
-                <option value="encaminhado">Encaminhado</option>
-                <option value="concluido">Concluído</option>
-              </Form.Select>{" "}
+                <option value="1">Solicitado</option>
+                <option value="2">Em Separação</option>
+                <option value="3">Encaminhado</option>
+                <option value="4">Concluído</option>
+              </Form.Select>
               {errors.state && touched.state ? (
                 <Alert variant="danger" className="text-muted">
                   {errors.state}
@@ -153,6 +170,8 @@ export const OrderForm = ({ data }: props) => {
               ) : null}
             </Form.Group>
 
+            <Alert variant={"info"}>Entregar em: {data.user.address}</Alert>
+            <Alert variant={"info"}>Contato: {data.user.phone}</Alert>
             <Button
               variant="primary"
               style={{
@@ -168,6 +187,7 @@ export const OrderForm = ({ data }: props) => {
           </Form>
         )}
       </Formik>
+
       <ToastContainer />
     </>
   );

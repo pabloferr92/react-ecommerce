@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap";
-import { FcEmptyTrash } from "react-icons/fc";
+import { BsTrash2 } from "react-icons/bs";
 type Props = {
   title?: string;
   icon?: string;
@@ -12,7 +12,7 @@ export const DeleteButton: React.FC<Props> = () => {
     <>
       <Button
         style={{
-          color: theme.colors.cold,
+          color: "red",
           fontSize: "25px",
           padding: 0,
           backgroundColor: theme.colors.background,
@@ -22,11 +22,7 @@ export const DeleteButton: React.FC<Props> = () => {
         }}
         className="p-1"
       >
-        <FcEmptyTrash
-          style={{
-            color: theme.colors.cold,
-          }}
-        ></FcEmptyTrash>
+        <BsTrash2></BsTrash2>
       </Button>
     </>
   );

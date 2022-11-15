@@ -1,33 +1,32 @@
 import { collectAssets } from "next/dist/build/webpack/plugins/middleware-plugin";
-import { SYMBOL_PREVIEW_DATA } from "next/dist/server/api-utils";
 import { Button } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 type Props = {
-  title?: string;
+  title: string;
   icon?: string;
+  disabled?: boolean;
 };
 import { IoIosAdd, IoIosBeer } from "react-icons/io";
 import { useTheme } from "styled-components";
 
-export const AddButton: React.FC<Props> = () => {
+export const SubmitButton: React.FC<Props> = ({ title, disabled }: Props) => {
   const theme = useTheme();
   return (
     <>
       <Button
         style={{
-          color: theme.colors.primary,
-          maxWidth: "50px",
-          fontSize: "20px",
+          color: theme.colors.text,
+          fontSize: "15px",
           padding: "10px",
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme.colors.primary,
           borderColor: theme.colors.border,
-          border: "solid",
           margin: 5,
           fontWeight: 400,
         }}
-        className="p-1"
+        type="submit"
+        disabled={disabled}
       >
-        <IoIosAdd></IoIosAdd>
+        {title}
       </Button>
     </>
   );

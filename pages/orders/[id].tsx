@@ -28,7 +28,6 @@ const OrderDetail = (props: any) => {
     });
   }, []);
 
-  console.log("atualizar " + JSON.stringify(props.data));
   return (
     <>
       <DefaultPage title="default">

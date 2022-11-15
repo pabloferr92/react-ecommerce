@@ -54,9 +54,16 @@ const NavMenu = () => {
                 </Link>
               </Col>
               <Col>
+                <Link href="/users/list" passHref>
+                  <Nav.Link style={{ color: theme.colors.primary }}>
+                    Usuários
+                  </Nav.Link>
+                </Link>
+              </Col>
+              <Col>
                 <Link href="/products/list" passHref>
                   <Nav.Link style={{ color: theme.colors.primary }}>
-                    Contato
+                    Configurações
                   </Nav.Link>
                 </Link>
               </Col>

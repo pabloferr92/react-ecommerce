@@ -5,6 +5,7 @@ import ProductService from "../services/ProductService";
 import { EditButton } from "./Buttons/EditButton";
 import { DeleteButton } from "./Buttons/DeleteButton";
 import { IOder } from "../models/Order";
+import { UserColumnComponent } from "./UserColumnComponent";
 
 type CompProps = {
   data: IProduct[];
@@ -16,8 +17,6 @@ const OrderListComponent = ({ data }: CompProps) => {
   const productService = new ProductService();
 
   function handleEditOrder(order: IOder) {
-    console.log("order editar " + order);
-
     router.push(`/orders/${order.id}`);
   }
 
@@ -29,12 +28,15 @@ const OrderListComponent = ({ data }: CompProps) => {
     },
     {
       name: "Usuário",
-      selector: (row: any) => row.description,
+      selector: (row: any) => row.user?.name || "",
+      // cell: (row: any) => (
+      //   <UserColumnComponent user={row.user}></UserColumnComponent>
+      // ),
     },
     {
       name: "Estado",
       selector: (row: any) => row.state,
-      cell: (row: any) => <div>{row.state.toUpperCase()}</div>,
+      cell: (row: any) => <div>{row.state.display_value?.toUpperCase()}</div>,
     },
     {
       name: "Data do pedido",
