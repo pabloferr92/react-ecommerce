@@ -10,7 +10,7 @@ pipeline {
             steps {
                 git branch: 'main', 
                     url: 'https://github.com/seu-repo/projeto-react.git',
-                    credentialsId: 'github-cred'
+                    credentialsId: '5aeac2b9-cc45-4ca0-a4a1-83076370436f'
             }
         }
         stage('Install dependencies') {
