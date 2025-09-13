@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'npm run build'
+                sh 'next dev'
             }
         }
         stage('Archive build artifacts') {
