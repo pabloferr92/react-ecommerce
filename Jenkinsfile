@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main', 
-                    url: 'https://github.com/seu-repo/projeto-react.git',
+                    url: 'https://github.com/pabloferr92/react-ecommerce.git',
                     credentialsId: '5aeac2b9-cc45-4ca0-a4a1-83076370436f'
             }
         }
