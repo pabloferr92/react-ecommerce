@@ -15,12 +15,12 @@ pipeline {
         }
         stage('Install dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
         stage('Build') {
             steps {
-                sh 'next dev'
+                bat 'npm run build'
             }
         }
         stage('Archive build artifacts') {
